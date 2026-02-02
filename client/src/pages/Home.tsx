@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background font-kanit">
+    <div className="min-h-screen flex flex-col bg-background font-kanit overflow-x-hidden">
       <Helmet>
         <title>Esther Clinic | สวย ครบ จบที่เดียว ชัยภูมิ-โคราช</title>
         <meta name="description" content="เอสเธอร์ คลินิก (Esther Clinic) บริการศัลยกรรมความงาม งานละเอียด ปลอดภัย มาตรฐานโรงพยาบาล โดยหมอเบียร์และทีมแพทย์ผู้เชี่ยวชาญ" />
@@ -217,8 +217,8 @@ export default function Home() {
                 <img src="/images/1200x1200.jpg" alt="Doctor Beer" className="w-full h-full object-cover" />
               </div>
               {/* Decorative elements */}
-              <div className="absolute top-10 -left-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl -z-10"></div>
-              <div className="absolute bottom-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl -z-10"></div>
+              <div className="absolute top-10 left-0 lg:-left-10 w-24 h-24 bg-primary/10 rounded-full blur-2xl -z-10"></div>
+              <div className="absolute bottom-10 right-0 lg:-right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl -z-10"></div>
             </div>
 
             <div className="w-full lg:w-1/2 text-center lg:text-left">
