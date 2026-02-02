@@ -4,7 +4,7 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@10.4.1
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
@@ -25,7 +25,7 @@ FROM node:20-slim AS runner
 WORKDIR /app
 
 # Install pnpm to handle prod dependencies
-RUN npm install -g pnpm
+RUN npm install -g pnpm@10.4.1
 
 # Set to production
 ENV NODE_ENV=production
@@ -33,6 +33,7 @@ ENV NODE_ENV=production
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+COPY --from=builder /app/patches ./patches
 
 # Install only production dependencies
 RUN pnpm install --prod --frozen-lockfile
