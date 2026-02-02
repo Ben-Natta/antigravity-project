@@ -4,21 +4,19 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@10.4.1
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# --- จุดที่แก้ไข: ก๊อปปี้ patches เข้าไปด้วยเพื่อป้องกัน ENOENT Error ---
-COPY patches ./patches 
-
-# Install dependencies (รวม patches ด้วย)
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source code ทั้งหมด
+# Copy source code
 COPY . .
 
 # Build the application
+# This runs 'vite build' and 'esbuild server/index.ts'
 RUN pnpm build
 
 # Production stage
@@ -26,22 +24,21 @@ FROM node:20-slim AS runner
 
 WORKDIR /app
 
-# Install pnpm สำหรับรัน production dependencies
-RUN npm install -g pnpm
+# Install pnpm to handle prod dependencies
+RUN npm install -g pnpm@10.4.1
 
 # Set to production
 ENV NODE_ENV=production
 
-# Copy เฉพาะไฟล์ที่จำเป็นมาจาก builder stage
+# Copy built files from builder
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
-# ก๊อปปี้ patches มาด้วยกรณีที่ production dependencies ต้องใช้
-COPY --from=builder /app/patches ./patches 
+COPY --from=builder /app/patches ./patches
 
 # Install only production dependencies
 RUN pnpm install --prod --frozen-lockfile
 
-# เปิดพอร์ต 5000 ตามที่แอปกำหนด
+# Expose the port (matches the port in server/index.ts)
 EXPOSE 5000
 
 # Start the application
